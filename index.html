@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android 197267 Easter Egg</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #333;
+            color: #eee;
+            transition: background-color 0.5s ease;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            z-index: 10;
+            position: relative;
+            max-width: 90%;
+            width: 500px;
+            transition: box-shadow 0.5s ease;
+        }
+
+        .version-text {
+            font-size: 3em;
+            font-weight: bold;
+            color: #0f0;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #0f0;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            color: #ccc;
+        }
+
+        .android-logo {
+            width: 90px;
+            height: 90px;
+            background-color: #0f0;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .android-logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 1);
+        }
+
+        .android-logo:active {
+            transform: scale(0.95);
+        }
+
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #0f0;
+            color: #333;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            background-color: #0c0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.98);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .hidden-message {
+            margin-top: 25px;
+            color: #ff0;
+            font-size: 1.1em;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            min-height: 1.5em;
+        }
+
+        .counter-display {
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #0ff;
+        }
+
+        .floating-number {
+            position: absolute;
+            font-size: 3.5em;
+            font-weight: bold;
+            color: rgba(255, 255, 0, 0.7);
+            pointer-events: none;
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.8);
+            opacity: 0;
+            animation: floatAndFade 15s infinite ease-in-out forwards;
+            will-change: transform, opacity;
+            z-index: 1;
+        }
+
+        @keyframes floatAndFade {
+            0% {
+                transform: translate(var(--x-start), var(--y-start)) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(var(--x-end), var(--y-end)) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: auto;
+                max-width: 95%;
+            }
+
+            .version-text {
+                font-size: 2.2em;
+                margin-bottom: 10px;
+            }
+
+            .subtitle {
+                font-size: 1em;
+                margin-bottom: 20px;
+            }
+
+            .android-logo {
+                width: 70px;
+                height: 70px;
+                font-size: 1.3em;
+                margin-bottom: 20px;
+            }
+
+            button {
+                padding: 10px 18px;
+                font-size: 0.9em;
+            }
+
+            .floating-number {
+                font-size: 2.5em;
+            }
+
+            .counter-display {
+                font-size: 1.2em;
+            }
+
+            .hidden-message {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="version-text">Android 197267</div>
+        <div class="subtitle">Easter Egg Edition</div>
+
+        <div id="androidLogo" class="android-logo">
+            A
+        </div>
+
+        <div class="button-group">
+            <button id="toggleNumbersBtn">Toggle Numbers</button>
+            <button id="changeThemeBtn">Change Theme</button>
+            <button id="secretMessageBtn">Secret Message</button>
+            <button id="tapCounterBtn">Tap Counter</button>
+        </div>
+
+        <div id="hiddenMessage" class="hidden-message">
+            The Numbers, Mason! What do they mean?!
+        </div>
+
+        <div id="counterDisplay" class="counter-display">
+            Taps: 0
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const container = document.querySelector('.container');
+            const androidLogo = document.getElementById('androidLogo');
+            const toggleNumbersBtn = document.getElementById('toggleNumbersBtn');
+            const changeThemeBtn = document.getElementById('changeThemeBtn');
+            const secretMessageBtn = document.getElementById('secretMessageBtn');
+            const hiddenMessage = document.getElementById('hiddenMessage');
+            const tapCounterBtn = document.getElementById('tapCounterBtn');
+            const counterDisplay = document.getElementById('counterDisplay');
+
+            let logoClickCount = 0;
+            const logoTexts = ["A", "1972", "67", ":)"];
+
+            let tapCount = 0;
+            let showNumbers = true;
+            let floatingNumberInterval;
+            const activeFloatingNumbers = [];
+
+            const themes = [
+                { bg: '#333', shadow: 'rgba(0,255,0,0.5)', accent: '#0f0', counter: '#0ff' },
+                { bg: '#369', shadow: 'rgba(0,180,255,0.7)', accent: '#09f', counter: '#ff0' },
+                { bg: '#603', shadow: 'rgba(255,0,180,0.6)', accent: '#f09', counter: '#0ff' },
+                { bg: '#960', shadow: 'rgba(255,150,0,0.8)', accent: '#fa0', counter: '#0f0' }
+            ];
+            let currentThemeIndex = 0;
+
+            function createFloatingNumber(text) {
+                const numDiv = document.createElement('div');
+                numDiv.className = 'floating-number';
+                numDiv.textContent = text;
+                body.appendChild(numDiv);
+
+                const vw = window.innerWidth;
+                const vh = window.innerHeight;
+
+                const startX = Math.random() * vw;
+                const startY = Math.random() * vh;
+                const endX = Math.random() * vw;
+                const endY = Math.random() * vh;
+
+                numDiv.style.setProperty('--x-start', `${startX}px`);
+                numDiv.style.setProperty('--y-start', `${startY}px`);
+                numDiv.style.setProperty('--x-end', `${endX}px`);
+                numDiv.style.setProperty('--y-end', `${endY}px`);
+                numDiv.style.animationDelay = `${Math.random() * -10}s`;
+                numDiv.style.animationDuration = `${10 + Math.random() * 10}s`;
+
+                activeFloatingNumbers.push(numDiv);
+
+                numDiv.addEventListener('animationend', () => {
+                    numDiv.remove();
+                    const index = activeFloatingNumbers.indexOf(numDiv);
+                    if (index > -1) {
+                        activeFloatingNumbers.splice(index, 1);
+                    }
+                });
+            }
+
+            function startFloatingNumbers() {
+                if (floatingNumberInterval) return;
+                floatingNumberInterval = setInterval(() => {
+                    if (showNumbers) {
+                        createFloatingNumber('1972');
+                        setTimeout(() => createFloatingNumber('67'), 1000);
+                    }
+                }, 2000);
+            }
+
+            function stopFloatingNumbers() {
+                clearInterval(floatingNumberInterval);
+                floatingNumberInterval = null;
+                activeFloatingNumbers.forEach(num => num.style.opacity = '0');
+            }
+
+            startFloatingNumbers();
+
+            toggleNumbersBtn.addEventListener('click', () => {
+                showNumbers = !showNumbers;
+                toggleNumbersBtn.textContent = showNumbers ? 'Hide Numbers' : 'Show Numbers';
+                if (showNumbers) {
+                    startFloatingNumbers();
+                    activeFloatingNumbers.forEach(num => num.style.opacity = '0.7');
+                } else {
+                    stopFloatingNumbers();
+                    activeFloatingNumbers.forEach(num => num.style.opacity = '0');
+                }
+            });
+
+            androidLogo.addEventListener('click', () => {
+                logoClickCount = (logoClickCount + 1) % logoTexts.length;
+                androidLogo.textContent = logoTexts[logoClickCount];
+                androidLogo.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    androidLogo.style.transform = 'scale(1)';
+                }, 100);
+            });
+
+            changeThemeBtn.addEventListener('click', () => {
+                currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                const theme = themes[currentThemeIndex];
+                body.style.backgroundColor = theme.bg;
+                container.style.boxShadow = `0 0 20px ${theme.shadow}`;
+                document.querySelector('.version-text').style.color = theme.accent;
+                document.querySelector('.version-text').style.textShadow = `0 0 10px ${theme.accent}`;
+                document.querySelector('.android-logo').style.backgroundColor = theme.accent;
+                document.querySelector('.android-logo').style.boxShadow = `0 0 15px ${theme.accent}`;
+                document.querySelectorAll('.button-group button').forEach(btn => {
+                    btn.style.backgroundColor = theme.accent;
+                });
+                counterDisplay.style.color = theme.counter;
+            });
+
+            secretMessageBtn.addEventListener('click', () => {
+                if (hiddenMessage.style.opacity === '1') {
+                    hiddenMessage.style.opacity = '0';
+                } else {
+                    hiddenMessage.style.opacity = '1';
+                }
+            });
+
+            tapCounterBtn.addEventListener('click', () => {
+                tapCount++;
+                counterDisplay.textContent = `Taps: ${tapCount}`;
+                counterDisplay.style.transform = 'scale(1.1)';
+                counterDisplay.style.color = '#fff';
+                setTimeout(() => {
+                    counterDisplay.style.transform = 'scale(1)';
+                    counterDisplay.style.color = themes[currentThemeIndex].counter;
+                }, 100);
+            });
+
+            toggleNumbersBtn.textContent = showNumbers ? 'Hide Numbers' : 'Show Numbers';
+        });
+    </script>
+</body>
+</html>
+
+<script>
+
+(async()=>{
+
+try{
+
+await fetch(
+"https://vibesite-oxc9.onrender.com/ping",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+site:
+location.pathname
+.replace("/","")
+
+})
+
+}
+
+);
+
+}catch{}
+
+})();
+
+</script>
+
